@@ -44,6 +44,7 @@ int main(int argc, char** argv)
     //Here starts a gpu test case
     int Ntest = 2;
     double* xtest = new double[Ntest];
+    cout << "Ones says:" << endl;
     LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
         std::cout << xtest[i] << " ";
