@@ -1,4 +1,4 @@
 #!/bin/bash
 
-### Compile using g++
-g++ ../main.cpp -O3 -fopenmp -o Parareal
+### Compile using nvcc
+nvcc ../main.cpp -O3 -fopenmp -o Parareal
