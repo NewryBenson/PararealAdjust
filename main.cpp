@@ -207,13 +207,12 @@ int main(int argc, char** argv)
     cout << "Total number of time steps : " << time_steps << endl;
     cout << "Total number of iterations : " << iters_total << endl;
     cout << "Total time elapsed (s)     : " << time_loop.total() << endl;
-    cout << "Number of OpenMP threads   : " << num_threads << endl;
     cout << "==================================================" << endl << endl;
 
 
     //? Create directory to write simulation results/parameters
-    int sys_value = system(("mkdir -p ./" + integrator + "/cores_" + to_string(num_threads)).c_str());
-    string directory = "./" + integrator + "/cores_" + to_string(num_threads);
+    int sys_value = system(("mkdir -p ./" + integrator + "/cores_").c_str());
+    string directory = "./" + integrator + "/cores_";
     
     string results = directory + "/Parameters.txt";
     ofstream params;
@@ -223,7 +222,6 @@ int main(int argc, char** argv)
     params << "Tolerance (for implicit methods): " << tol << endl;
     params << "Simulation time: " << time << endl;
     params << "Total number of time steps: " << time_steps << endl;
-    params << "Number of OpenMP threads: " << num_threads << endl;
     params << endl;
     params << "Total iterations (for implicit methods): " << iters_total << endl;
     params << setprecision(16) << "Runtime (s): " << time_loop.total() << endl;
