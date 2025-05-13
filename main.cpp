@@ -41,7 +41,11 @@ int main(int argc, char** argv)
 
     //! Set GPU spport to false
     bool GPU_access = atoi(argv[7]);
-    cout << "Undefined problem! Please check that you have entered the correct problem." << endl;
+    //Here starts a gpu test case
+    if (GPU_access){
+        cout << "At least that works" << endl;
+    }
+    //here it ends
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
     int N = n*n;                                    // # grid points (2D)

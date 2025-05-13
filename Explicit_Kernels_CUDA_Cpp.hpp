@@ -79,7 +79,6 @@ namespace LeXInt
         else
         {
             // CPU version
-            std::cout << "Error: Compiled with GCC, not NVCC." << std::endl;
             RK4_Cpp(RHS, u, u_sol, u_temp, dt, N);
         }
     }
