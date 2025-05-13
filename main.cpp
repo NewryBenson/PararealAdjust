@@ -35,12 +35,12 @@ int main(int argc, char** argv)
     int output_cycle = -1;                   // How often data is written to files (if you want a movie)
     output_cycle = atoi(argv[6]);
 
-    int num_threads;                        // # of OpenMP threads
-    #pragma omp parallel
-    num_threads = omp_get_num_threads();
+
+
 
     //! Set GPU spport
     bool GPU_access = atoi(argv[7]);
+
     //Here starts a gpu test case
     int Ntest = 2;
     double* xtest = new double[Ntest];
