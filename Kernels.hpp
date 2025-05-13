@@ -9,7 +9,7 @@
 //? ----------------------------------------------------------
 
 
-#include "error_check.hpp"
+//#include "error_check.hpp"
 #include "Timer.hpp"
 
 #ifdef __CUDACC__

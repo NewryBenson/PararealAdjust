@@ -14,7 +14,8 @@
 #include "Dif_Adv_2D.hpp"
 
 //? Solvers
-#include "Explicit.hpp"
+#include "Kernels_CUDA_Cpp.hpp"
+#include "Explicit_Kernels_CUDA_Cpp.hpp"
 
 using namespace std;
 
@@ -39,8 +40,8 @@ int main(int argc, char** argv)
     num_threads = omp_get_num_threads();
 
     //! Set GPU spport to false
-    bool GPU_access = false;
-
+    bool GPU_access = atoi(argv[7]);
+    cout << "Undefined problem! Please check that you have entered the correct problem." << endl;
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
     int N = n*n;                                    // # grid points (2D)
@@ -142,15 +143,15 @@ int main(int argc, char** argv)
 
         if (integrator == "Explicit_Euler")
         {
-            explicit_Euler(RHS, u, u_sol, u_temp, dt, N);
+            LeXInt::explicit_Euler(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else if (integrator == "RK2")
         {
-            RK2(RHS, u, u_sol, u_temp, dt, N);
+            LeXInt::RK2(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else if (integrator == "RK4")
         {
-            RK4(RHS, u, u_sol, u_temp, dt, N);
+            LeXInt::RK4(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else
         {

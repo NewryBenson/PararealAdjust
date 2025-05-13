@@ -25,3 +25,4 @@ Argument 4: Tolerance, for iterative methods (e.g., 1e-10) <br />
 Argument 5: Number of time steps (e.g., 16) <br />
 Argument 6: Desired integrator (e.g., "RK4")  <br />
 Argument 7: Write data to files every 10 time steps for movies (set to -1 to not write data) <br />
+Argument 8: Wether or not to use GPU. If set to False, CPU will be used.

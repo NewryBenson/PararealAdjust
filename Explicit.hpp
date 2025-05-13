@@ -18,7 +18,7 @@
 //? ----------------------------------------------------------
 
 template <typename rhs>
-void explicit_Euler(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
+void explicit_Euler_Cpp(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
 {
     //? RHS(u) = u_sol = du/dt
     RHS(u, u_sol);
@@ -29,7 +29,7 @@ void explicit_Euler(rhs RHS, double* u, double* u_sol, double* u_temp, double dt
 
 
 template <typename rhs>
-void RK2(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
+void RK2_Cpp(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
 {
     //? Assign names and variables
     double* k1 = &u_temp[0]; double* k2 = &u_temp[N];
@@ -49,7 +49,7 @@ void RK2(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
 
 
 template <typename rhs>
-void RK4(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
+void RK4_Cpp(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N)
 {
     //? Assign names and variables
     double* k1 = &u_temp[0];   double* k2 = &u_temp[N];
