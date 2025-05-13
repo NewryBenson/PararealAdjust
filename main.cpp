@@ -39,12 +39,16 @@ int main(int argc, char** argv)
     #pragma omp parallel
     num_threads = omp_get_num_threads();
 
-    //! Set GPU spport to false
+    //! Set GPU spport
     bool GPU_access = atoi(argv[7]);
     //Here starts a gpu test case
-    if (GPU_access){
-        cout << "At least that works" << endl;
+    int Ntest = 2;
+    double* xtest = new double[Ntest];
+    LeXInt::ones(xtest, Ntest, GPU_access);
+    for (int i = 0; i < Ntest; ++i) {
+        std::cout << xtest[i] << " ";
     }
+    std::cout << std::endl;
     //here it ends
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
