@@ -10,9 +10,9 @@
 //?
 //? ----------------------------------------------------------
 #include "Explicit.hpp"
-#include "Kernels.hpp"
+#include "Kernels.cu"
 #include "functions.hpp"
-#include "Explicit_Kernels.hpp"
+#include "Explicit_Kernels.cu"
 
 
 namespace LeXInt

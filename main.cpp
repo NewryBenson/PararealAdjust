@@ -14,8 +14,8 @@
 #include "Dif_Adv_2D.hpp"
 
 //? Solvers
-#include "Kernels_CUDA_Cpp.hpp"
-#include "Explicit_Kernels_CUDA_Cpp.hpp"
+#include "Kernels_CUDA_Cpp.cu"
+#include "Explicit_Kernels_CUDA_Cpp.cu"
 
 using namespace std;
 

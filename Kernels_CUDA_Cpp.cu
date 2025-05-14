@@ -10,7 +10,7 @@
 //?
 //? ----------------------------------------------------------
 
-#include "Kernels.hpp"
+#include "Kernels.cu"
 #include "functions.hpp"
 
 namespace LeXInt
