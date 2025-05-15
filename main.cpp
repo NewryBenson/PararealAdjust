@@ -15,6 +15,7 @@
 
 //? Solvers
 #include "Explicit.hpp"
+#include "Kernels.hpp"
 
 using namespace std;
 
@@ -47,7 +48,8 @@ int main(int argc, char** argv)
     double* xtest = new double[Ntest];
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
     cout << "Ones says:" << endl;
-    LeXInt::ones(xtest, Ntest, GPU_access);
+    ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+    //LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
         std::cout << xtest[i] << " ";
     }
