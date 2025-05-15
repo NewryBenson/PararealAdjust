@@ -48,7 +48,15 @@ int main(int argc, char** argv)
     double* xtest;
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
     cout << "Ones says:" << endl;
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
+    }
     LeXInt::ones_CUDA<<<(Ntest/128) + 1, 128>>>(xtest, Ntest);
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
+    }
     cudaDeviceSynchronize();
     //LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
