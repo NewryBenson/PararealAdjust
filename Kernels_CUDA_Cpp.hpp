@@ -20,11 +20,12 @@ namespace LeXInt
     {
         double norm;
 
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
                 //* CUDA
-                cublasDnrm2(cublas_handle.cublas_handle, N, x, 1, &norm);
+                //we are not using this and it gives errors
+                //cublasDnrm2(cublas_handle.cublas_handle, N, x, 1, &norm);
             #else
 
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -43,7 +44,7 @@ namespace LeXInt
     //? Set x = y
     void copy(double *x, double *y, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
@@ -63,15 +64,32 @@ namespace LeXInt
     }
 
     //? ones(y) = (y[0:N] =) 1.0
-    void ones(double *x, size_t N, bool GPU)
+    void ones(double* x, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
-            //* CUDA
-            ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            int count = 0;
+            cudaGetDeviceCount(&count);
+            if (count == 0) {
+                std::cerr << "No CUDA devices found. Falling back to CPU." << std::endl;
+                //* C++
+                ones_Cpp(x, N);
+            }
+            else{
 
+                cudaError_t err = cudaMallocManaged(&x, N*sizeof(int));
+                if (err != cudaSuccess) {
+                    std::cerr << "cudaMallocManaged failed: " << cudaGetErrorString(err) << std::endl;
+                    exit(1);
+                }
+
+                //* CUDA
+                ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+
+                cudaDeviceSynchronize();
+            }
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
             exit(1);
@@ -87,7 +105,7 @@ namespace LeXInt
     //? ones(y) = (y[0:N] =) 1.0
     void eigen_ones(double *x, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
@@ -111,10 +129,10 @@ namespace LeXInt
     void axpby(double a, double *x, 
                          double *y, size_t N, bool GPU)
     {
-        if (GPU == true)
+        
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
-
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, y, N);
 
@@ -136,7 +154,7 @@ namespace LeXInt
                double b, double *y, 
                          double *z, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
@@ -161,7 +179,7 @@ namespace LeXInt
                double c, double *z, 
                          double *w, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
@@ -187,7 +205,7 @@ namespace LeXInt
                double d, double *w, 
                          double *v, size_t N, bool GPU)
     {
-        if (GPU == true)
+        if (GPU == 1)
         {
             #ifdef __CUDACC__
 
@@ -203,6 +221,33 @@ namespace LeXInt
         {
             //* C++
             axpby_Cpp(a, x, b, y, c, z, d, w, v, N);
+        }
+    }
+
+    //? v = ax + by + cz + dw + ev
+    void axpby(double a, double *x, 
+               double b, double *y, 
+               double c, double *z, 
+               double d, double *w, 
+               double e, double *v, 
+                         double *u, size_t N, bool GPU)
+    {
+        if (GPU == 1)
+        {
+            #ifdef __CUDACC__
+
+            //* CUDA
+            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, e, v, u, N);
+
+            #else
+            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
+            exit(1);
+            #endif
+        }
+        else
+        {
+            //* C++
+            axpby_Cpp(a, x, b, y, c, z, d, w, e, v, u, N);
         }
     }
 }

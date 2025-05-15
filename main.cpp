@@ -34,12 +34,24 @@ int main(int argc, char** argv)
     int output_cycle = -1;                   // How often data is written to files (if you want a movie)
     output_cycle = atoi(argv[6]);
 
-    int num_threads;                        // # of OpenMP threads
-    #pragma omp parallel
-    num_threads = omp_get_num_threads();
+    bool GPU_access = atoi(argv[7]);
+    #ifdef __CUDACC__
+    #else
+        int num_threads;                        // # of OpenMP threads
+        #pragma omp parallel
+        num_threads = omp_get_num_threads();
+    #endif
 
-    //! Set GPU spport to false
-    bool GPU_access = false;
+    //TEST LOCATION
+    int Ntest = 2;
+    double* xtest = new double[Ntest];
+    cout << "Ones says:" << endl;
+    LeXInt::ones(xtest, Ntest, GPU_access);
+    for (int i = 0; i < Ntest; ++i) {
+        std::cout << xtest[i] << " ";
+    }
+    std::cout << std::endl;
+    //END TEST LOCATION
 
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
@@ -142,15 +154,15 @@ int main(int argc, char** argv)
 
         if (integrator == "Explicit_Euler")
         {
-            explicit_Euler(RHS, u, u_sol, u_temp, dt, N);
+            explicit_Euler(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else if (integrator == "RK2")
         {
-            RK2(RHS, u, u_sol, u_temp, dt, N);
+            RK2(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else if (integrator == "RK4")
         {
-            RK4(RHS, u, u_sol, u_temp, dt, N);
+            RK4(RHS, u, u_sol, u_temp, dt, N, GPU_access);
         }
         else
         {
@@ -198,14 +210,21 @@ int main(int argc, char** argv)
     cout << "Total number of time steps : " << time_steps << endl;
     cout << "Total number of iterations : " << iters_total << endl;
     cout << "Total time elapsed (s)     : " << time_loop.total() << endl;
-    cout << "Number of OpenMP threads   : " << num_threads << endl;
+    #ifdef __CUDACC__
+    #else
+        cout << "Number of OpenMP threads   : " << num_threads << endl;
+    #endif
+    
     cout << "==================================================" << endl << endl;
 
-
-    //? Create directory to write simulation results/parameters
-    int sys_value = system(("mkdir -p ./" + integrator + "/cores_" + to_string(num_threads)).c_str());
-    string directory = "./" + integrator + "/cores_" + to_string(num_threads);
-    
+    #ifdef __CUDACC__
+        int sys_value = system(("mkdir -p ./" + integrator).c_str());
+        string directory = "./" + integrator;
+    #else
+        //? Create directory to write simulation results/parameters
+        int sys_value = system(("mkdir -p ./" + integrator + "/cores_" + to_string(num_threads)).c_str());
+        string directory = "./" + integrator + "/cores_" + to_string(num_threads);
+    #endif
     string results = directory + "/Parameters.txt";
     ofstream params;
     params.open(results);
@@ -214,7 +233,10 @@ int main(int argc, char** argv)
     params << "Tolerance (for implicit methods): " << tol << endl;
     params << "Simulation time: " << time << endl;
     params << "Total number of time steps: " << time_steps << endl;
-    params << "Number of OpenMP threads: " << num_threads << endl;
+    #ifdef __CUDACC__
+    #else
+        params << "Number of OpenMP threads: " << num_threads << endl;
+    #endif
     params << endl;
     params << "Total iterations (for implicit methods): " << iters_total << endl;
     params << setprecision(16) << "Runtime (s): " << time_loop.total() << endl;

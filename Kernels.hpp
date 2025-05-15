@@ -9,7 +9,7 @@
 //? ----------------------------------------------------------
 
 
-#include "error_check.hpp"
+//#include "error_check.hpp"
 #include "Timer.hpp"
 
 #ifdef __CUDACC__
@@ -129,6 +129,22 @@ namespace LeXInt
         if(ii < N) 
         {
             v[ii] = (a * x[ii]) + (b * y[ii]) + (c * z[ii]) + (d * w[ii]);
+        }
+    }
+
+    //? v = ax + by + cz + dw + ev
+    __global__ void axpby_CUDA(double a, double *x,
+                               double b, double *y,
+                               double c, double *z,
+                               double d, double *w,
+                               double e, double *v,
+                                         double *u, size_t N)
+    {
+        int ii = blockDim.x * blockIdx.x + threadIdx.x;
+
+        if(ii < N) 
+        {
+            v[ii] = (a * x[ii]) + (b * y[ii]) + (c * z[ii]) + (d * w[ii]) + (e * v[ii]);
         }
     }
 
