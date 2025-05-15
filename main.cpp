@@ -53,9 +53,9 @@ int main(int argc, char** argv)
         std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
     }
     LeXInt::ones_CUDA<<<(Ntest/128) + 1, 128>>>(xtest, Ntest);
-    cudaError_t err = cudaGetLastError();
-    if (err != cudaSuccess) {
-        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
+    cudaError_t err2 = cudaGetLastError();
+    if (err2 != cudaSuccess) {
+        std::cerr << "CUDA error: " << cudaGetErrorString(err2) << std::endl;
     }
     cudaDeviceSynchronize();
     //LeXInt::ones(xtest, Ntest, GPU_access);
