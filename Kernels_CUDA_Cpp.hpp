@@ -81,7 +81,7 @@ namespace LeXInt
 
 
                 //* CUDA
-                ones_CUDA<<<(N/128) + 1, 128>>>(out, N);
+                ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
 
             }
             #else
