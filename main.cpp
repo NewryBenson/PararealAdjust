@@ -45,6 +45,7 @@ int main(int argc, char** argv)
     //TEST LOCATION
     int Ntest = 2;
     double* xtest = new double[Ntest];
+    cudaMallocManaged(&xtest, Ntest * sizeof(double));
     cout << "Ones says:" << endl;
     LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
