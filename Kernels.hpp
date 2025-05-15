@@ -63,6 +63,7 @@ namespace LeXInt
         {
             x[ii] = 1.0;
         }
+        ::std::cout << x[0] << ::std::endl;
     }
 
     //? ones(y) = (y[0:N] =) 1.0
