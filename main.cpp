@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     double* xtest = new double[Ntest];
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
     cout << "Ones says:" << endl;
-    ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+    LeXInt::ones_CUDA<<<(Ntest/128) + 1, 128>>>(xtest, Ntest);
     //LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
         std::cout << xtest[i] << " ";
