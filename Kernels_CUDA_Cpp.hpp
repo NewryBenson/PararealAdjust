@@ -79,16 +79,19 @@ namespace LeXInt
             }
             else{
 
-                cudaError_t err = cudaMallocManaged(&x, N*sizeof(int));
+                double* out;
+
+                cudaError_t err = cudaMalloc(&out, N*sizeof(double));
                 if (err != cudaSuccess) {
-                    std::cerr << "cudaMallocManaged failed: " << cudaGetErrorString(err) << std::endl;
+                    std::cerr << "cudaMalloc failed: " << cudaGetErrorString(err) << std::endl;
                     exit(1);
                 }
 
                 //* CUDA
-                ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+                ones_CUDA<<<(N/128) + 1, 128>>>(out, N);
 
-                cudaDeviceSynchronize();
+                cudaMemcpy(x, out, N*sizeof(double), cudaMemcpyDeviceToHost);
+                cudaFree(out);
             }
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
