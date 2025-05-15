@@ -221,10 +221,6 @@ int main(int argc, char** argv)
     params << "Tolerance (for implicit methods): " << tol << endl;
     params << "Simulation time: " << time << endl;
     params << "Total number of time steps: " << time_steps << endl;
-    #ifdef __CUDACC__
-    #else
-        params << "Number of OpenMP threads: " << num_threads << endl;
-    #endif
     params << endl;
     params << "Total iterations (for implicit methods): " << iters_total << endl;
     params << setprecision(16) << "Runtime (s): " << time_loop.total() << endl;
