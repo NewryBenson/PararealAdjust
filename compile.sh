@@ -4,4 +4,4 @@
 #g++ ../main.cpp -O3 -fopenmp -o Parareal
 
 ### Compile using nvcc
-nvcc -arch=sm_80 ../main.cpp -O3 -o Parareal
+nvcc -x cu -arch=sm_80 ../main.cpp -O3 -o Parareal
