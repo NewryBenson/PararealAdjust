@@ -45,10 +45,11 @@ int main(int argc, char** argv)
 
     //TEST LOCATION
     int Ntest = 2;
-    double* xtest = new double[Ntest];
+    double* xtest;
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
     cout << "Ones says:" << endl;
     LeXInt::ones_CUDA<<<(Ntest/128) + 1, 128>>>(xtest, Ntest);
+    cudaDeviceSynchronize();
     //LeXInt::ones(xtest, Ntest, GPU_access);
     for (int i = 0; i < Ntest; ++i) {
         std::cout << xtest[i] << " ";
