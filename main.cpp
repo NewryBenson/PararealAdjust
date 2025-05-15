@@ -35,12 +35,7 @@ int main(int argc, char** argv)
     output_cycle = atoi(argv[6]);
 
     bool GPU_access = atoi(argv[7]);
-    #ifdef __CUDACC__
-    #else
-        int num_threads;                        // # of OpenMP threads
-        #pragma omp parallel
-        num_threads = omp_get_num_threads();
-    #endif
+    
 
     //TEST LOCATION
     int Ntest = 2;
@@ -210,21 +205,14 @@ int main(int argc, char** argv)
     cout << "Total number of time steps : " << time_steps << endl;
     cout << "Total number of iterations : " << iters_total << endl;
     cout << "Total time elapsed (s)     : " << time_loop.total() << endl;
-    #ifdef __CUDACC__
-    #else
-        cout << "Number of OpenMP threads   : " << num_threads << endl;
-    #endif
+    
     
     cout << "==================================================" << endl << endl;
 
-    #ifdef __CUDACC__
-        int sys_value = system(("mkdir -p ./" + integrator).c_str());
-        string directory = "./" + integrator;
-    #else
-        //? Create directory to write simulation results/parameters
-        int sys_value = system(("mkdir -p ./" + integrator + "/cores_" + to_string(num_threads)).c_str());
-        string directory = "./" + integrator + "/cores_" + to_string(num_threads);
-    #endif
+    
+    int sys_value = system(("mkdir -p ./" + integrator).c_str());
+    string directory = "./" + integrator;
+    
     string results = directory + "/Parameters.txt";
     ofstream params;
     params.open(results);
