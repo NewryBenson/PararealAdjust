@@ -6,8 +6,8 @@
 int main() {
     int Ntest = 1;
     double* xtest;
-    bool GPU = 0;
-
+    bool GPU = 1;
+    std::cout << "Sanity1" << std::endl;
     LeXInt::ones(xtest, Ntest, GPU);
 
     if (xtest[0] == 1){std::cout << "GPU runs correctly" << std::endl;};

@@ -66,13 +66,15 @@ namespace LeXInt
     //? ones(y) = (y[0:N] =) 1.0
     void ones(double* x, size_t N, bool GPU)
     {
+        std::cout << "Sanity2" << std::endl;
         if (GPU == 1)
         {
+            std::cout << "Sanity3" << std::endl;
             #ifdef __CUDACC__
-
+            std::cout << "Sanity4" << std::endl;
             //reserve shared memory
             cudaMallocManaged(&x, N * sizeof(double));
-
+            std::cout << "Sanity5" << std::endl;
             LeXInt::ones_CUDA<<<(N + 127) / 128, 128>>>(x, N);
 
             //wait for gpu to finish
@@ -84,6 +86,7 @@ namespace LeXInt
         }
         else
         {
+            std::cout << "SanityFail" << std::endl;
             //* C++
             ones_Cpp(x, N);
         }
