@@ -9,7 +9,7 @@ int main() {
     double* xtest;
     bool GPU = 1;
 
-    LeXInt::ones(xtest, Ntest, GPU)
+    LeXInt::ones(xtest, Ntest, GPU);
 
     if (xtest[0] == 1){std::cout << "GPU runs correctly" << std::endl;};
 
