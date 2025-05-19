@@ -69,26 +69,14 @@ namespace LeXInt
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
 
-            int count = 0;
-            cudaGetDeviceCount(&count);
-            if (count == 0) {
-                std::cerr << "No CUDA devices found. Falling back to CPU." << std::endl;
-                //* C++
-                ones_Cpp(x, N);
-            }
-            else{
+            //* CUDA
+            ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
 
-                cudaError_t err = cudaMallocManaged(&x, N*sizeof(int));
-                if (err != cudaSuccess) {
-                    std::cerr << "cudaMallocManaged failed: " << cudaGetErrorString(err) << std::endl;
-                    exit(1);
-                }
-
-                //* CUDA
-                ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
-
-                cudaDeviceSynchronize();
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
             }
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;

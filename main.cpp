@@ -37,16 +37,14 @@ int main(int argc, char** argv)
     bool GPU_access = atoi(argv[7]);
     
 
-    //TEST LOCATION
-    int Ntest = 2;
-    double* xtest = new double[Ntest];
-    cout << "Ones says:" << endl;
+    //TEST GPU/CPU
+    int Ntest = 1;
+    double* xtest;
     LeXInt::ones(xtest, Ntest, GPU_access);
-    for (int i = 0; i < Ntest; ++i) {
-        std::cout << xtest[i] << " ";
-    }
+    if (xtest[0] == 1){std::cout << "GPU/CPU runs correctly" << std::endl;};
+    else{std::cout << "GPU/CPU failed" << std::endl;};
     std::cout << std::endl;
-    //END TEST LOCATION
+    //END TEST GPU/CPU
 
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
