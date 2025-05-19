@@ -9,34 +9,20 @@ __global__ void ones_CUDA(double *x, size_t N) {
 }
 
 int main() {
-    int Ntest = 2;
+    int Ntest = 1;
     double* xtest;
 
+    //reserve shared memory
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
 
-    std::cout << "Ones says:" << std::endl;
-
     ones_CUDA<<<(Ntest + 127) / 128, 128>>>(xtest, Ntest);
-    cudaError_t err = cudaGetLastError();
-    if (err != cudaSuccess) {
-        std::cerr << "Kernel launch failed: " << cudaGetErrorString(err) << std::endl;
-    }
 
-    // ✅ Wait for kernel to complete
+    //wait for gpu to finish
     cudaDeviceSynchronize();
 
-    // ✅ Check for errors during execution
-    err = cudaGetLastError();
-    if (err != cudaSuccess) {
-        std::cerr << "Kernel execution failed: " << cudaGetErrorString(err) << std::endl;
-    }
+    if (xtest[0] == 1){std::cout << "GPU runs correctly" << std::endl};
 
-
-    for (int i = 0; i < Ntest; ++i) {
-        std::cout << xtest[i] << " ";
-    }
-    std::cout << std::endl;
-
+    //free the reserved memory
     cudaFree(xtest);
     return 0;
 }
