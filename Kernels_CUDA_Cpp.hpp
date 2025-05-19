@@ -76,7 +76,7 @@ namespace LeXInt
         {
             #ifdef __CUDACC__
             //reserve shared memory
-            cudaMallocManaged(&x, N * sizeof(double));
+            //cudaMallocManaged(&x, N * sizeof(double));
 
             //* CUDA
             LeXInt::ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
