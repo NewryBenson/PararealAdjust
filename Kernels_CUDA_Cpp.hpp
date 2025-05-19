@@ -42,14 +42,20 @@ namespace LeXInt
     }
 
     //? Set x = y
-    void copy(double *x, double *y, size_t N, bool GPU)
+    void copy(double*& x, double*& y, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
 
             //* CUDA
-            copy_CUDA<<<(N/128) + 1, 128>>>(x, y, N);
+            LeXInt::copy_CUDA<<<(N/128) + 1, 128>>>(x, y, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -64,16 +70,16 @@ namespace LeXInt
     }
 
     //? ones(y) = (y[0:N] =) 1.0
-    void ones(double** x, size_t N, bool GPU)
+    void ones(double*& x, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
             //reserve shared memory
-            cudaMallocManaged(x, N * sizeof(double));
+            cudaMallocManaged(&x, N * sizeof(double));
 
             //* CUDA
-            LeXInt::ones_CUDA<<<(N/128) + 1, 128>>>(*x, N);
+            LeXInt::ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -85,7 +91,7 @@ namespace LeXInt
         else
         {
             //* C++
-            ones_Cpp(*x, N);
+            ones_Cpp(x, N);
         }
     }
 
