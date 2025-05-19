@@ -71,9 +71,9 @@ namespace LeXInt
             #ifdef __CUDACC__
 
             //reserve shared memory
-            cudaMallocManaged(&xtest, Ntest * sizeof(double));
+            cudaMallocManaged(&x, N * sizeof(double));
 
-            LeXInt::ones_CUDA<<<(Ntest + 127) / 128, 128>>>(xtest, Ntest);
+            LeXInt::ones_CUDA<<<(N + 127) / 128, 128>>>(x, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
