@@ -96,14 +96,20 @@ namespace LeXInt
     }
 
     //? ones(y) = (y[0:N] =) 1.0
-    void eigen_ones(double *x, size_t N, bool GPU)
+    void eigen_ones(double*& x, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
 
             //* CUDA
-            eigen_ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            LeXInt::eigen_ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
