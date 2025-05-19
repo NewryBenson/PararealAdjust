@@ -2,7 +2,7 @@
 #include <cuda_runtime.h>
 
 #include "Kernels.hpp"
-#include "Kernel_CUDA_Cpp.hpp"
+#include "Kernels_CUDA_Cpp.hpp"
 
 int main() {
     int Ntest = 1;
