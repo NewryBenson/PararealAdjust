@@ -38,6 +38,17 @@ int main(int argc, char** argv)
     bool GPU_access = atoi(argv[7]);
     
 
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0); // 0 = device ID
+
+    std::cout << "Device: " << prop.name << std::endl;
+    std::cout << "Multiprocessors: " << prop.multiProcessorCount << std::endl;
+    std::cout << "Max threads per block: " << prop.maxThreadsPerBlock << std::endl;
+    std::cout << "Max threads per multiprocessor: " << prop.maxThreadsPerMultiProcessor << std::endl;
+    std::cout << "Max blocks per dimension: " << prop.maxGridSize[0] << std::endl;
+    std::cout << "Max threads per dimension: " << prop.maxThreadsDim[0] << std::endl;
+
+
     //TEST GPU/CPU
     int Ntest = 1;
     double* xtest;
