@@ -64,16 +64,16 @@ namespace LeXInt
     }
 
     //? ones(y) = (y[0:N] =) 1.0
-    void ones(double* x, size_t N, bool GPU)
+    void ones(double** x, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
             //reserve shared memory
-            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(x, N * sizeof(double));
 
             //* CUDA
-            ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            LeXInt::ones_CUDA<<<(N/128) + 1, 128>>>(*x, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -85,7 +85,7 @@ namespace LeXInt
         else
         {
             //* C++
-            ones_Cpp(x, N);
+            ones_Cpp(*x, N);
         }
     }
 

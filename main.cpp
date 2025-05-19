@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     int Ntest = 1;
     double* xtest;
     std::cout << "Test reached" << std::endl;
-    LeXInt::ones(xtest, Ntest, GPU_access);
+    LeXInt::ones(&xtest, Ntest, GPU_access);
     if (xtest[0] == 1){std::cout << "GPU/CPU runs correctly" << std::endl;}
     else{std::cout << "GPU/CPU failed" << std::endl;};
     std::cout << std::endl;
