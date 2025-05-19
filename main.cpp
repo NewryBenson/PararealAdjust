@@ -1,13 +1,12 @@
 #include <iostream>
 #include <cuda_runtime.h>
 
-#include "Kernels.hpp"
 #include "Kernels_CUDA_Cpp.hpp"
 
 int main() {
     int Ntest = 1;
     double* xtest;
-    bool GPU = 1;
+    bool GPU = 0;
 
     LeXInt::ones(xtest, Ntest, GPU);
 
