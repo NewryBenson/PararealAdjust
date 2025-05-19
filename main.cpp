@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cuda_runtime.h>
 
-#include "Kernels"
+#include "Kernels.hpp"
 
 int main() {
     int Ntest = 1;
