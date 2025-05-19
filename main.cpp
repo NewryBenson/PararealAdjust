@@ -15,6 +15,7 @@
 
 //? Solvers
 #include "Explicit.hpp"
+#include "Kernels_CUDA_cpp.hpp"
 
 using namespace std;
 
