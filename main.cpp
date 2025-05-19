@@ -10,7 +10,7 @@ int main() {
     //reserve shared memory
     cudaMallocManaged(&xtest, Ntest * sizeof(double));
 
-    ones_CUDA<<<(Ntest + 127) / 128, 128>>>(xtest, Ntest);
+    LeXInt::ones_CUDA<<<(Ntest + 127) / 128, 128>>>(xtest, Ntest);
 
     //wait for gpu to finish
     cudaDeviceSynchronize();
