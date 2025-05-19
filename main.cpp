@@ -23,7 +23,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-
+    std::cout << "Code runs" << std::endl;
     int index = atoi(argv[1]);              // N = 2^index * 2^index
     double n_cfl = atof(argv[2]);           // dt = n_cfl * dt_cfl
     double tol = atof(argv[3]);             // User-specified tolerance
@@ -41,6 +41,7 @@ int main(int argc, char** argv)
     //TEST GPU/CPU
     int Ntest = 1;
     double* xtest;
+    std::cout << "Test reached" << std::endl;
     LeXInt::ones(xtest, Ntest, GPU_access);
     if (xtest[0] == 1){std::cout << "GPU/CPU runs correctly" << std::endl;}
     else{std::cout << "GPU/CPU failed" << std::endl;};
