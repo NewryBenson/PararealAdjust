@@ -26,6 +26,7 @@ namespace LeXInt
                 //* CUDA
                 //we are not using this and it gives errors
                 //cublasDnrm2(cublas_handle.cublas_handle, N, x, 1, &norm);
+
             #else
 
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -52,7 +53,9 @@ namespace LeXInt
             cudaMallocManaged(&y, N * sizeof(double));
 
             //* CUDA
-            LeXInt::copy_CUDA<<<(N/128) + 1, 128>>>(x, y, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            LeXInt::copy_CUDA<<<blocks, TPB>>>(x, y, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -79,7 +82,9 @@ namespace LeXInt
             cudaMallocManaged(&x, N * sizeof(double));
 
             //* CUDA
-            LeXInt::ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            LeXInt::ones_CUDA<<<blocks, TPB>>>(x, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -106,7 +111,9 @@ namespace LeXInt
             cudaMallocManaged(&x, N * sizeof(double));
 
             //* CUDA
-            LeXInt::eigen_ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            LeXInt::eigen_ones_CUDA<<<blocks, TPB>>>(x, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -138,7 +145,9 @@ namespace LeXInt
             cudaMallocManaged(&y, N * sizeof(double));
 
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, y, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            axpby_CUDA<<<blocks, TPB>>>(a, x, y, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -170,7 +179,9 @@ namespace LeXInt
             cudaMallocManaged(&z, N * sizeof(double));
 
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, z, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            axpby_CUDA<<<blocks, TPB>>>(a, x, b, y, z, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -203,7 +214,9 @@ namespace LeXInt
             cudaMallocManaged(&w, N * sizeof(double));
 
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, w, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            axpby_CUDA<<<blocks, TPB>>>(a, x, b, y, c, z, w, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -238,7 +251,9 @@ namespace LeXInt
             cudaMallocManaged(&v, N * sizeof(double));
 
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, v, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            axpby_CUDA<<<blocks, TPB>>>(a, x, b, y, c, z, d, w, v, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
@@ -276,7 +291,9 @@ namespace LeXInt
             cudaMallocManaged(&u, N * sizeof(double));
 
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, e, v, u, N);
+            const int TPB = 256;
+            int blocks = (N + TPB - 1) / TPB;
+            axpby_CUDA<<<blocks, TPB>>>(a, x, b, y, c, z, d, w, e, v, u, N);
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
