@@ -1,12 +1,7 @@
 #include <iostream>
 #include <cuda_runtime.h>
 
-__global__ void ones_CUDA(double *x, size_t N) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < N) {
-        x[idx] = 1.0;
-    }
-}
+#include "Kernels"
 
 int main() {
     int Ntest = 1;
