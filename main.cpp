@@ -173,7 +173,7 @@ int main(int argc, char** argv)
         iters_total = iters_total + iters;
 
         //? Update solution
-        LeXInt::copy(u_sol, u, N);
+        LeXInt::copy(u_sol, u, N, GPU_access);
 
         if (time_steps % 100 == 0)
         {
