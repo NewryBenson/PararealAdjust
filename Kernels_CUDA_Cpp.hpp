@@ -77,7 +77,6 @@ namespace LeXInt
 
             //wait for gpu to finish
             cudaDeviceSynchronize();
-            }
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
             exit(1);
