@@ -187,6 +187,7 @@ int main(int argc, char** argv)
         {
             cout << "Writing data to files at the " << time_steps << "th time step" << endl;
             string output_data = "./movie/" +  to_string(time_steps) + ".txt";
+            cout << "Length of the data: " << sizeof(u)<< endl;
             ofstream data;
             data.open(output_data); 
             for(int ii = 0; ii < N; ii++)
