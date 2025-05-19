@@ -89,7 +89,7 @@ namespace LeXInt
         {
 
             //* C++
-            ones_Cpp(x, N);
+            ones_Cpp(*x, N);
         }
     }
 
