@@ -79,6 +79,7 @@ namespace LeXInt
             std::cout << "Sanity6" << std::endl;
             //wait for gpu to finish
             cudaDeviceSynchronize();
+            std::cout << "Sanity7" << std::endl;
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
             exit(1);
