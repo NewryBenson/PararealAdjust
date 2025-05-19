@@ -20,7 +20,7 @@ int main() {
     //wait for gpu to finish
     cudaDeviceSynchronize();
 
-    if (xtest[0] == 1){std::cout << "GPU runs correctly" << std::endl};
+    if (xtest[0] == 1){std::cout << "GPU runs correctly" << std::endl;};
 
     //free the reserved memory
     cudaFree(xtest);
