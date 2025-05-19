@@ -125,15 +125,23 @@ namespace LeXInt
 
 
     //? y = ax
-    void axpby(double a, double *x, 
-                         double *y, size_t N, bool GPU)
+    void axpby(double a, double*& x, 
+                         double*& y, size_t N, bool GPU)
     {
         
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
+
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, y, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             cout << "Error. Compiled with gcc, not nvcc." << endl;
@@ -149,16 +157,23 @@ namespace LeXInt
 
 
     //? z = ax + by
-    void axpby(double a, double *x, 
-               double b, double *y, 
-                         double *z, size_t N, bool GPU)
+    void axpby(double a, double*& x, 
+               double b, double*& y, 
+                         double*& z, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
+            cudaMallocManaged(&z, N * sizeof(double));
 
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, z, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -173,17 +188,25 @@ namespace LeXInt
     }
 
     //? w = ax + by + cz
-    void axpby(double a, double *x, 
-               double b, double *y, 
-               double c, double *z, 
-                         double *w, size_t N, bool GPU)
+    void axpby(double a, double*& x, 
+               double b, double*& y, 
+               double c, double*& z, 
+                         double*& w, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
+            cudaMallocManaged(&z, N * sizeof(double));
+            cudaMallocManaged(&w, N * sizeof(double));
 
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, w, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -198,18 +221,27 @@ namespace LeXInt
     }
 
     //? v = ax + by + cz + dw
-    void axpby(double a, double *x, 
-               double b, double *y, 
-               double c, double *z, 
-               double d, double *w, 
-                         double *v, size_t N, bool GPU)
+    void axpby(double a, double*& x, 
+               double b, double*& y, 
+               double c, double*& z, 
+               double d, double*& w, 
+                         double*& v, size_t N, bool GPU)
     {
         if (GPU == 1)
         {
             #ifdef __CUDACC__
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
+            cudaMallocManaged(&z, N * sizeof(double));
+            cudaMallocManaged(&w, N * sizeof(double));
+            cudaMallocManaged(&v, N * sizeof(double));
 
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, v, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
@@ -235,8 +267,19 @@ namespace LeXInt
         {
             #ifdef __CUDACC__
 
+            //reserve shared memory
+            cudaMallocManaged(&x, N * sizeof(double));
+            cudaMallocManaged(&y, N * sizeof(double));
+            cudaMallocManaged(&z, N * sizeof(double));
+            cudaMallocManaged(&w, N * sizeof(double));
+            cudaMallocManaged(&v, N * sizeof(double));
+            cudaMallocManaged(&u, N * sizeof(double));
+
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, e, v, u, N);
+
+            //wait for gpu to finish
+            cudaDeviceSynchronize();
 
             #else
             ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
