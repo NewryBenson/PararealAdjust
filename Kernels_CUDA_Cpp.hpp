@@ -76,7 +76,7 @@ namespace LeXInt
             cudaMallocManaged(&x, N * sizeof(double));
             std::cout << "Sanity5" << std::endl;
             LeXInt::ones_CUDA<<<(N + 127) / 128, 128>>>(x, N);
-
+            std::cout << "Sanity6" << std::endl;
             //wait for gpu to finish
             cudaDeviceSynchronize();
             #else
