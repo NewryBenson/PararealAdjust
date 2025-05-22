@@ -144,7 +144,7 @@ namespace LeXInt
 
         if(ii < N) 
         {
-            v[ii] = (a * x[ii]) + (b * y[ii]) + (c * z[ii]) + (d * w[ii]) + (e * v[ii]);
+            u[ii] = (a * x[ii]) + (b * y[ii]) + (c * z[ii]) + (d * w[ii]) + (e * v[ii]);
         }
     }
 
