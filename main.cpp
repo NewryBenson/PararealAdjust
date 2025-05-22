@@ -329,7 +329,7 @@ int main(int argc, char** argv)
     data.precision(16);
     for(int ii = 0; ii < N; ii++)
     {
-        data << u[ii] << "\n";
+        cout << u[ii] << endl;
     }
     data.close();
 
