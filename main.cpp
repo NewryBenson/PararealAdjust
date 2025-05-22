@@ -8,7 +8,7 @@
 
 //? LeXInt Timer and functions
 #include "Timer.hpp"
-#include "functions.hpp"
+#include "Kernels_CUDA_Cpp.hpp"
 
 //? Problems
 #include "Dif_Adv_2D.hpp"
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     num_threads = omp_get_num_threads();
 
     //! Set GPU spport to false
-    bool GPU_access = false;
+    bool GPU_access = atoi(argv[7]);
 
     //* Initialise parameters
     int n = pow(2, index);                          // # grid points (1D)
@@ -122,6 +122,10 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    
+    
+
+
     //! Create directories (for movies)
     if (output_cycle > 0 && output_cycle < num_time_steps)
     {
@@ -134,60 +138,152 @@ int main(int argc, char** argv)
     time_loop.start();
 
     cout << "Running the 2D diffusion--advection problem with the " << integrator << " integrator." << endl << endl;
-
-    for (int nn = 0; nn < num_time_steps; nn++)
-    {
-
-        //? ------------- List of integrators ------------- ?//
+    
+    if (GPU_access == true){
+        //! Allocate memory on GPU
+        
+        #ifdef __CUDACC__
+        double* u_D;
+        cudaMalloc(&u_D, N_size);
+        cudaMemcpy(u_D, u, N_size, cudaMemcpyHostToDevice);
+        double* u_sol_D;
+        cudaMalloc(&u_sol_D, N_size);            //* Solution vector
+        double* u_temp_D;                                     //* Temporary vector(s) for integrators
 
         if (integrator == "Explicit_Euler")
         {
-            explicit_Euler(RHS, u, u_sol, u_temp, dt, N);
+
         }
         else if (integrator == "RK2")
         {
-            RK2(RHS, u, u_sol, u_temp, dt, N);
+            cudaMalloc(&u_temp_D, 2*N_size);
         }
         else if (integrator == "RK4")
         {
-            RK4(RHS, u, u_sol, u_temp, dt, N);
+            cudaMalloc(&u_temp_D, 4*N_size);
         }
         else
         {
             cout << "Incorrect integrator! Please recheck. Terminating simulations ... " << endl << endl;
             return 1;
         }
+        #else
+        ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
+        exit(1);
+        #endif
 
-        //? ----------------------------------------------- ?//
-
-        //* Update variables
-        time = time + dt;
-        time_steps = time_steps + 1;
-        iters_total = iters_total + iters;
-
-        //? Update solution
-        copy_Cpp(u_sol, u, N);
-
-        if (time_steps % 100 == 0)
+        for (int nn = 0; nn < num_time_steps; nn++)
         {
-            // double norm = l1norm_Cpp(u_sol, N);
-            // cout << "l1 norm of u   : " << norm << endl;
-            cout << endl << "Time step      : " << time_steps << endl;
-            cout << "Simulation time: " << time << endl << endl;
-        }
 
-        //! Write data to files (for movies)
-        if (time_steps % output_cycle == 0 && output_cycle > 0)
-        {
-            cout << "Writing data to files at the " << time_steps << "th time step" << endl;
-            string output_data = "./movie/" +  to_string(time_steps) + ".txt";
-            ofstream data;
-            data.open(output_data); 
-            for(int ii = 0; ii < N; ii++)
+            //? ------------- List of integrators ------------- ?//
+
+            if (integrator == "Explicit_Euler")
             {
-                data << setprecision(16) << u[ii] << endl;
+                explicit_Euler(RHS, u_D, u_sol_D, u_temp_D, dt, N, true);
             }
-            data.close();
+            else if (integrator == "RK2")
+            {
+                RK2(RHS, u_D, u_sol_D, u_temp_D, dt, N, true);
+            }
+            else if (integrator == "RK4")
+            {
+                RK4(RHS, u_D, u_sol_D, u_temp_D, dt, N, true);
+            }
+            else
+            {
+                cout << "Incorrect integrator! Please recheck. Terminating simulations ... " << endl << endl;
+                return 1;
+            }
+
+            //? ----------------------------------------------- ?//
+
+            //* Update variables
+            time = time + dt;
+            time_steps = time_steps + 1;
+            iters_total = iters_total + iters;
+
+            //? Update solution
+            LeXInt::copy(u_sol_D, u_D, N, true);
+
+            if (time_steps % 100 == 0)
+            {
+                // double norm = l1norm_Cpp(u_sol, N);
+                // cout << "l1 norm of u   : " << norm << endl;
+                cout << endl << "Time step      : " << time_steps << endl;
+                cout << "Simulation time: " << time << endl << endl;
+            }
+
+            //! Write data to files (for movies)
+            if (time_steps % output_cycle == 0 && output_cycle > 0)
+            {
+                cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
+                cout << "Writing data to files at the " << time_steps << "th time step" << endl;
+                string output_data = "./movie/" +  to_string(time_steps) + ".txt";
+                ofstream data;
+                data.open(output_data); 
+                for(int ii = 0; ii < N; ii++)
+                {
+                    data << setprecision(16) << u[ii] << endl;
+                }
+                data.close();
+            }
+        }
+    }
+    else{
+        for (int nn = 0; nn < num_time_steps; nn++)
+        {
+
+            //? ------------- List of integrators ------------- ?//
+
+            if (integrator == "Explicit_Euler")
+            {
+                explicit_Euler(RHS, u, u_sol, u_temp, dt, N, false);
+            }
+            else if (integrator == "RK2")
+            {
+                RK2(RHS, u, u_sol, u_temp, dt, N, false);
+            }
+            else if (integrator == "RK4")
+            {
+                RK4(RHS, u, u_sol, u_temp, dt, N, false);
+            }
+            else
+            {
+                cout << "Incorrect integrator! Please recheck. Terminating simulations ... " << endl << endl;
+                return 1;
+            }
+
+            //? ----------------------------------------------- ?//
+
+            //* Update variables
+            time = time + dt;
+            time_steps = time_steps + 1;
+            iters_total = iters_total + iters;
+
+            //? Update solution
+            LeXInt::copy(u_sol, u, N, false);
+
+            if (time_steps % 100 == 0)
+            {
+                // double norm = l1norm_Cpp(u_sol, N);
+                // cout << "l1 norm of u   : " << norm << endl;
+                cout << endl << "Time step      : " << time_steps << endl;
+                cout << "Simulation time: " << time << endl << endl;
+            }
+
+            //! Write data to files (for movies)
+            if (time_steps % output_cycle == 0 && output_cycle > 0)
+            {
+                cout << "Writing data to files at the " << time_steps << "th time step" << endl;
+                string output_data = "./movie/" +  to_string(time_steps) + ".txt";
+                ofstream data;
+                data.open(output_data); 
+                for(int ii = 0; ii < N; ii++)
+                {
+                    data << setprecision(16) << u[ii] << endl;
+                }
+                data.close();
+            }
         }
     }
 

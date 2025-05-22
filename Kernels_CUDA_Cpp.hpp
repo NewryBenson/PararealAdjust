@@ -22,14 +22,9 @@ namespace LeXInt
 
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-                //* CUDA
-                cublasDnrm2(cublas_handle.cublas_handle, N, x, 1, &norm);
-            #else
-
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
+            //* CUDA
+            //! Does not work and not used so commented.
+            // cublasDnrm2(cublas_handle.cublas_handle, N, x, 1, &norm);
         }
         else
         {
@@ -45,15 +40,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             copy_CUDA<<<(N/128) + 1, 128>>>(x, y, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -67,15 +55,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -89,15 +70,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             eigen_ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -113,15 +87,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, y, N);
-
-            #else
-            cout << "Error. Compiled with gcc, not nvcc." << endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -138,15 +105,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, z, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -163,15 +123,8 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, w, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
@@ -189,20 +142,33 @@ namespace LeXInt
     {
         if (GPU == true)
         {
-            #ifdef __CUDACC__
-
             //* CUDA
             axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, v, N);
-
-            #else
-            ::std::cout << "Error. Compiled with gcc, not nvcc." << ::std::endl;
-            exit(1);
-            #endif
         }
         else
         {
             //* C++
             axpby_Cpp(a, x, b, y, c, z, d, w, v, N);
+        }
+    }
+
+        //? u = ax + by + cz + dw + ev
+    void axpby(double a, double *x, 
+               double b, double *y, 
+               double c, double *z, 
+               double d, double *w, 
+               double e, double *v,
+                         double *u, size_t N, bool GPU)
+    {
+        if (GPU == true)
+        {
+            //* CUDA
+            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, e, v, u, N);
+        }
+        else
+        {
+            //* C++
+            axpby_Cpp(a, x, b, y, c, z, d, w, e, v, u, N);
         }
     }
 }

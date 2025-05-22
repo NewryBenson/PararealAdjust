@@ -44,18 +44,18 @@ struct RHS_Dif_Adv_2D:public Problems_2D
     //! Constructor
     RHS_Dif_Adv_2D(int _N, double _dx, double _dy, double _velocity) : Problems_2D(_N, _dx, _dy, _velocity) {}
 
-    void operator()(double* input, double* output)
+    void operator()(double* input, double* output, bool GPU)
     {
-        #ifdef __CUDACC__
-
+        if (GPU == true)
+        {
             int num_threads = 16;
             dim3 threads(num_threads, num_threads);
             dim3 blocks((N + num_threads - 1)/num_threads, (N + num_threads - 1)/num_threads);
             
             Dif_Adv_2D<<<blocks, threads>>>(N, dx, dy, velocity, input, output);
-        
-        #else
-
+        }
+        else
+        {
             int num_threads = 32;
 
             #pragma omp parallel for collapse(2)
@@ -93,7 +93,7 @@ struct RHS_Dif_Adv_2D:public Problems_2D
                 }
             }
             
-        #endif
+        }
     }
 
     //! Destructor
