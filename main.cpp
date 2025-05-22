@@ -280,6 +280,7 @@ int main(int argc, char** argv)
                 // cout << "l1 norm of u   : " << norm << endl;
                 cout << endl << "Time step      : " << time_steps << endl;
                 cout << "Simulation time: " << time_loop.stop() - writeTime - setupTime << endl << endl;
+                cout << u[0] << endl;
             }
 
             //! Write data to files (for movies)
