@@ -227,9 +227,10 @@ int main(int argc, char** argv)
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
                 ofstream data;
                 data.open(output_data); 
+                data.precision(16);
                 for(int ii = 0; ii < N; ii++)
                 {
-                    data << setprecision(16) << u[ii] << endl;
+                    data << u[ii] << "\n";
                 }
                 data.close();
                 writeTime = writeTime + time_loop.stop() - startTime;
