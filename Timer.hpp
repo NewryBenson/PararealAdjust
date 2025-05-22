@@ -55,7 +55,7 @@ namespace LeXInt
                 }
                 double t = (double)sec + nsec/1e9;
                 counter++;
-                elapsed += t;
+                elapsed = t;
                 return t;
             }
         }
