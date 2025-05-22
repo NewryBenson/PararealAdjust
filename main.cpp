@@ -215,7 +215,7 @@ int main(int argc, char** argv)
                 // double norm = l1norm_Cpp(u_sol, N);
                 // cout << "l1 norm of u   : " << norm << endl;
                 cout << endl << "Time step      : " << time_steps << endl;
-                cout << "Simulation time: " << time << endl << endl;
+                cout << "Simulation time: " << time_loop.stop()-setupTime << endl << endl;
             }
 
             //! Write data to files (for movies)

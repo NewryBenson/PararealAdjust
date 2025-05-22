@@ -15,6 +15,7 @@
 
 namespace LeXInt
 {
+    int threadsPerBlock = 256;
     //?l2 norm
     double l2norm(double *x, size_t N, bool GPU, GPU_handle& cublas_handle)
     {
@@ -40,8 +41,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            copy_CUDA<<<(N/128) + 1, 128>>>(x, y, N);
+            copy_CUDA<<<numBlocks, threadsPerBlock>>>(x, y, N);
         }
         else
         {
@@ -55,8 +57,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            ones_CUDA<<<numBlocks, threadsPerBlock>>>(x, N);
         }
         else
         {
@@ -70,8 +73,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            eigen_ones_CUDA<<<(N/128) + 1, 128>>>(x, N);
+            eigen_ones_CUDA<<<numBlocks, threadsPerBlock>>>(x, N);
         }
         else
         {
@@ -87,8 +91,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, y, N);
+            axpby_CUDA<<<numBlocks, threadsPerBlock>>>(a, x, y, N);
         }
         else
         {
@@ -105,8 +110,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, z, N);
+            axpby_CUDA<<<numBlocks, threadsPerBlock>>>(a, x, b, y, z, N);
         }
         else
         {
@@ -123,8 +129,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, w, N);
+            axpby_CUDA<<<numBlocks, threadsPerBlock>>>(a, x, b, y, c, z, w, N);
         }
         else
         {
@@ -142,8 +149,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, v, N);
+            axpby_CUDA<<<numBlocks, threadsPerBlock>>>(a, x, b, y, c, z, d, w, v, N);
         }
         else
         {
@@ -162,8 +170,9 @@ namespace LeXInt
     {
         if (GPU == true)
         {
+            int numBlocks = (N + threadsPerBlock - 1) / threadsPerBlock;
             //* CUDA
-            axpby_CUDA<<<(N/128) + 1, 128>>>(a, x, b, y, c, z, d, w, e, v, u, N);
+            axpby_CUDA<<<numBlocks, threadsPerBlock>>>(a, x, b, y, c, z, d, w, e, v, u, N);
         }
         else
         {
