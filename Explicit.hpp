@@ -57,7 +57,9 @@ void RK4(rhs RHS, double* u, double* u_sol, double* u_temp, double dt, size_t N,
 
     //? Internal stage 1: k1 = dt * RHS(u)
     RHS(u, k1, GPU);                                 //* k1 = RHS(u) = du/dt
+    cout << k1[0] << endl;
     LeXInt::axpby(dt, k1, k1, N, GPU);                   //* k1 = k1 * dt
+    cout << k1[0] << endl;
 
     //? Internal stage 2: k2 = dt * RHS(u + k1/2)
     LeXInt::axpby(1.0, u, 0.5, k1, u_sol, N, GPU);       //* u_sol = u + k1/2

@@ -243,7 +243,6 @@ int main(int argc, char** argv)
         cout << "Running the 2D diffusion--advection problem on the CPU with the " << integrator << " integrator." << endl << endl;
         for (int nn = 0; nn < num_time_steps; nn++)
         {
-            cout << u[0] << endl;
             //? ------------- List of integrators ------------- ?//
 
             if (integrator == "Explicit_Euler")
@@ -329,7 +328,7 @@ int main(int argc, char** argv)
     data.precision(16);
     for(int ii = 0; ii < N; ii++)
     {
-        cout << u[ii] << endl;
+        data << u[ii] << "\n";
     }
     data.close();
 
