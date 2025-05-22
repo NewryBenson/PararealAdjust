@@ -243,7 +243,7 @@ int main(int argc, char** argv)
         cout << "Running the 2D diffusion--advection problem on the CPU with the " << integrator << " integrator." << endl << endl;
         for (int nn = 0; nn < num_time_steps; nn++)
         {
-
+            cout << u[0] << endl;
             //? ------------- List of integrators ------------- ?//
 
             if (integrator == "Explicit_Euler")
@@ -280,7 +280,6 @@ int main(int argc, char** argv)
                 // cout << "l1 norm of u   : " << norm << endl;
                 cout << endl << "Time step      : " << time_steps << endl;
                 cout << "Simulation time: " << time_loop.stop() - writeTime - setupTime << endl << endl;
-                cout << u[0] << endl;
             }
 
             //! Write data to files (for movies)
