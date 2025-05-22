@@ -22,6 +22,8 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    LeXInt::timer time_loop;
+    time_loop.start();
 
     int index = atoi(argv[1]);              // N = 2^index * 2^index
     double n_cfl = atof(argv[2]);           // dt = n_cfl * dt_cfl
@@ -73,6 +75,9 @@ int main(int argc, char** argv)
     int time_steps = 0;                                     // # time steps
     int iters = 0;                                          // # of iterations per time step
     int iters_total = 0;                                    // Total # of iterations during the simulation
+    double writeTime = 0;
+    double setupTime = 0;
+    double startTime = 0;
 
     cout << endl << "N = " << N << ", tol = " << tol << ", Time steps = " << num_time_steps << endl;
     cout << "N_cfl = " << n_cfl << ", CFL: " << min(dif_cfl, adv_cfl) << ", dt = " << dt << endl << endl;
@@ -133,13 +138,10 @@ int main(int argc, char** argv)
         string directory = "./movie/";
     }
 
-    //! Time Loop
-    LeXInt::timer time_loop;
-    time_loop.start();
-
-    cout << "Running the 2D diffusion--advection problem with the " << integrator << " integrator." << endl << endl;
+    
     
     if (GPU_access == true){
+        
         //! Allocate memory on GPU
 
         #ifdef __CUDACC__
@@ -172,6 +174,9 @@ int main(int argc, char** argv)
         exit(1);
         #endif
 
+        setupTime = time_loop.stop();
+
+        cout << "Running the 2D diffusion--advection problem on the GPU with the " << integrator << " integrator." << endl << endl;
         for (int nn = 0; nn < num_time_steps; nn++)
         {
 
@@ -216,6 +221,7 @@ int main(int argc, char** argv)
             //! Write data to files (for movies)
             if (time_steps % output_cycle == 0 && output_cycle > 0)
             {
+                startTime = time_loop.stop();
                 cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
@@ -226,10 +232,14 @@ int main(int argc, char** argv)
                     data << setprecision(16) << u[ii] << endl;
                 }
                 data.close();
+                writeTime = writeTime + time_loop.stop() - startTime;
             }
         }
     }
     else{
+        setupTime = time_loop.stop();
+
+        cout << "Running the 2D diffusion--advection problem on the CPU with the " << integrator << " integrator." << endl << endl;
         for (int nn = 0; nn < num_time_steps; nn++)
         {
 
@@ -274,6 +284,7 @@ int main(int argc, char** argv)
             //! Write data to files (for movies)
             if (time_steps % output_cycle == 0 && output_cycle > 0)
             {
+                startTime = time_loop.stop();
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
                 ofstream data;
@@ -283,6 +294,7 @@ int main(int argc, char** argv)
                     data << setprecision(16) << u[ii] << endl;
                 }
                 data.close();
+                writeTime = writeTime + time_loop.stop() - startTime;
             }
         }
     }
@@ -293,7 +305,10 @@ int main(int argc, char** argv)
     cout << "Simulation time            : " << time << endl;
     cout << "Total number of time steps : " << time_steps << endl;
     cout << "Total number of iterations : " << iters_total << endl;
-    cout << "Total time elapsed (s)     : " << time_loop.total() << endl;
+    cout << "Total setup time (s)       : " << setupTime << endl;
+    cout << "Total calculation time (s) : " << time_loop.total()-setupTime-writeTime << endl;
+    cout << "Total writing time (s)     : " << writeTime << endl;
+    cout << "Total time (s)             : " << time_loop.total() << endl;
     cout << "Number of OpenMP threads   : " << num_threads << endl;
     cout << "==================================================" << endl << endl;
 
