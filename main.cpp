@@ -225,13 +225,14 @@ int main(int argc, char** argv)
                 cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
+                std::ostringstream buffer;
+                buffer.precision(16);
+                for (int ii = 0; ii < N; ++ii) {
+                    buffer << u[ii] << "\n"; // no flush
+                }
                 ofstream data;
                 data.open(output_data); 
-                data.precision(16);
-                for(int ii = 0; ii < N; ii++)
-                {
-                    data << u[ii] << "\n";
-                }
+                data << buffer.str();
                 data.close();
                 writeTime = writeTime + time_loop.stop() - startTime;
             }
@@ -288,13 +289,14 @@ int main(int argc, char** argv)
                 startTime = time_loop.stop();
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
+                std::ostringstream buffer;
+                buffer.precision(16);
+                for (int ii = 0; ii < N; ++ii) {
+                    buffer << u[ii] << "\n"; // no flush
+                }
                 ofstream data;
                 data.open(output_data); 
-                data.precision(16);
-                for(int ii = 0; ii < N; ii++)
-                {
-                    data << u[ii] << "\n";
-                }
+                data << buffer.str();
                 data.close();
                 writeTime = writeTime + time_loop.stop() - startTime;
             }
@@ -324,12 +326,14 @@ int main(int argc, char** argv)
 
     //? Create file to write final simulation data
     string final_data = directory + "/dt_cfl_" + to_string(n_cfl) + "_data.txt";
-    ofstream data;
-    data.open(final_data);
-    for(int ii = 0; ii < N; ii++)
-    {
-        data << setprecision(16) << u[ii] << "\n";
+    std::ostringstream buffer;
+    buffer.precision(16);
+    for (int ii = 0; ii < N; ++ii) {
+        buffer << u[ii] << "\n"; // no flush
     }
+    ofstream data;
+    data.open(final_data); 
+    data << buffer.str();
     data.close();
 
     writeTime = writeTime + time_loop.stop() - startTime;
