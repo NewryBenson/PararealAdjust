@@ -301,19 +301,8 @@ int main(int argc, char** argv)
         }
     }
 
-    time_loop.stop();
-
-    cout << endl << "==================================================" << endl;
-    cout << "Simulation time            : " << time << endl;
-    cout << "Total number of time steps : " << time_steps << endl;
-    cout << "Total number of iterations : " << iters_total << endl;
-    cout << "Total setup time (s)       : " << setupTime << endl;
-    cout << "Total calculation time (s) : " << time_loop.total()-setupTime-writeTime << endl;
-    cout << "Total writing time (s)     : " << writeTime << endl;
-    cout << "Total time (s)             : " << time_loop.total() << endl;
-    cout << "Number of OpenMP threads   : " << num_threads << endl;
-    cout << "==================================================" << endl << endl;
-
+    
+    startTime = time_loop.stop();
 
     //? Create directory to write simulation results/parameters
     int sys_value = system(("mkdir -p ./" + integrator + "/cores_" + to_string(num_threads)).c_str());
@@ -339,9 +328,24 @@ int main(int argc, char** argv)
     data.open(final_data);
     for(int ii = 0; ii < N; ii++)
     {
-        data << setprecision(16) << u[ii] << endl;
+        data << setprecision(16) << u[ii] << "\n";
     }
     data.close();
+
+    writeTime = writeTime + time_loop.stop() - startTime;
+
+    time_loop.stop();
+
+    cout << endl << "==================================================" << endl;
+    cout << "Simulation time            : " << time << endl;
+    cout << "Total number of time steps : " << time_steps << endl;
+    cout << "Total number of iterations : " << iters_total << endl;
+    cout << "Total setup time (s)       : " << setupTime << endl;
+    cout << "Total calculation time (s) : " << time_loop.total()-setupTime-writeTime << endl;
+    cout << "Total writing time (s)     : " << writeTime << endl;
+    cout << "Total time (s)             : " << time_loop.total() << endl;
+    cout << "Number of OpenMP threads   : " << num_threads << endl;
+    cout << "==================================================" << endl << endl;
 
     cout << "Simulations complete!" << endl;
 
