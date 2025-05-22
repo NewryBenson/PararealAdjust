@@ -42,8 +42,8 @@ int main(int argc, char** argv)
     bool GPU_access = atoi(argv[7]);
 
     //* Initialise parameters
-    int n = pow(2, index);                          // # grid points (1D)
-    int N = n*n;                                    // # grid points (2D)
+    long long n = pow(2, index);                          // # grid points (1D)
+    long long N = n*n;                                    // # grid points (2D)
     double xmin = -1;                               // Left boundary (limit)
     double xmax =  1;                               // Right boundary (limit)
     double ymin = -1;                               // Left boundary (limit)
@@ -141,7 +141,7 @@ int main(int argc, char** argv)
     
     if (GPU_access == true){
         //! Allocate memory on GPU
-        
+
         #ifdef __CUDACC__
         double* u_D;
         cudaMalloc(&u_D, N_size);
