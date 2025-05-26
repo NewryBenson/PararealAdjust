@@ -209,6 +209,7 @@ int main(int argc, char** argv)
 
             //? Update solution
             LeXInt::copy(u_sol_D, u_D, N, true);
+            cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
 
             if (time_steps % 100 == 0)
             {
@@ -222,8 +223,7 @@ int main(int argc, char** argv)
             if (time_steps % output_cycle == 0 && output_cycle > 0)
             {
                 startTime = time_loop.stop();
-                cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
-                cudaDeviceSynchronize();
+                
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
                 ofstream data;
