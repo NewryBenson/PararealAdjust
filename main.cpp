@@ -209,6 +209,8 @@ int main(int argc, char** argv)
 
             //? Update solution
             LeXInt::copy(u_sol_D, u_D, N, true);
+            cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
+            cout << u[0] << endl;
 
             if (time_steps % 100 == 0)
             {
@@ -272,6 +274,7 @@ int main(int argc, char** argv)
 
             //? Update solution
             LeXInt::copy(u_sol, u, N, false);
+            cout << u[0] << endl;
 
             if (time_steps % 100 == 0)
             {
