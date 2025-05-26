@@ -223,7 +223,7 @@ int main(int argc, char** argv)
             {
                 startTime = time_loop.stop();
                 cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
-                cudaDeviceSynchronize()
+                cudaDeviceSynchronize();
                 cout << "Writing data to files at the " << time_steps << "th time step" << endl;
                 string output_data = "./movie/" +  to_string(time_steps) + ".txt";
                 ofstream data;
