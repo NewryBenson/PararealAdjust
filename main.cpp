@@ -144,7 +144,7 @@ int main(int argc, char** argv)
         //! Allocate memory on GPU
 
         #ifdef __CUDACC__
-        
+        double* u_D;
         cudaMalloc(&u_D, N_size);
         cudaMemcpy(u_D, u, N_size, cudaMemcpyHostToDevice);
         double* u_sol_D;
