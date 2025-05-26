@@ -139,13 +139,12 @@ int main(int argc, char** argv)
     }
 
     
-    
     if (GPU_access == true){
         
         //! Allocate memory on GPU
 
         #ifdef __CUDACC__
-        double* u_D;
+        
         cudaMalloc(&u_D, N_size);
         cudaMemcpy(u_D, u, N_size, cudaMemcpyHostToDevice);
         double* u_sol_D;
@@ -237,6 +236,7 @@ int main(int argc, char** argv)
                 writeTime = writeTime + time_loop.stop() - startTime;
             }
         }
+        cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
     }
     else{
         setupTime = time_loop.stop();
@@ -323,7 +323,7 @@ int main(int argc, char** argv)
     params.close();
 
     //? Create file to write final simulation data
-    cudaMemcpy(u, u_D, N_size, cudaMemcpyDeviceToHost);
+    
     string final_data = directory + "/dt_cfl_" + to_string(n_cfl) + "_data.txt";
     ofstream data;
     data.open(final_data); 
