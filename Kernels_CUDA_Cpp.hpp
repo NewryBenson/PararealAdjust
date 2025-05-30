@@ -15,7 +15,7 @@
 
 namespace LeXInt
 {
-    int threadsPerBlock = 256;
+    int threadsPerBlock = 128;
     //?l2 norm
     double l2norm(double *x, size_t N, bool GPU, GPU_handle& cublas_handle)
     {
